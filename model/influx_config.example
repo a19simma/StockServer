@@ -1,0 +1,5 @@
+args = {
+    'url': 'https://localhost:8086',
+    'org': org,
+    'token': token
+}
