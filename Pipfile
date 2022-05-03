@@ -5,7 +5,8 @@ name = "pypi"
 
 [packages]
 flask = "*"
-influxdb = "*"
+pytest = "*"
+influxdb-client = "*"
 
 [dev-packages]
 
