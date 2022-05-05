@@ -1,4 +1,4 @@
-from ..src.models.db_connection import connection, cursor
+from ...src.database.connection import connection
 
 def test_connection():
     try:

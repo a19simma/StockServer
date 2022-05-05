@@ -1,2 +1,3 @@
-db_config.py
 .pytest_cache
+.env
+__pycache__
