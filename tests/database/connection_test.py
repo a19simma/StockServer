@@ -1,4 +1,4 @@
-from ...src.database.connection import connection
+from src.database.connection import connection
 
 def test_connection():
     try:

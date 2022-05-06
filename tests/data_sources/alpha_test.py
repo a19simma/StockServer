@@ -1,4 +1,4 @@
-from ...src.data_sources.alpha import AlphaVantage
+from src.data_sources.alpha import AlphaVantage
 import pandas as pd
 
 def test_getTicker_type():

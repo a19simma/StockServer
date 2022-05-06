@@ -1,11 +1,5 @@
 import yfinance as yf
-
 class YahooFinance():
     def getTicker(self, ticker):
-        return yf.Ticker(ticker)
-
-
-yahoo = YahooFinance()
-msft = yahoo.getTicker('MSFT')
-
-print(msft.history(period='max'))
+        ticker_object = yf.Ticker(ticker)        
+        return ticker_object.history(period='max')
