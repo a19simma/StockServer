@@ -12,6 +12,7 @@ python-dotenv = "*"
 pgcopy = "*"
 pandas = "*"
 alpha-vantage = "*"
+autopep8 = "*"
 
 [dev-packages]
 
