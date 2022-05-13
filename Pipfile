@@ -13,6 +13,7 @@ pgcopy = "*"
 pandas = "*"
 alpha-vantage = "*"
 autopep8 = "*"
+coverage = "*"
 
 [dev-packages]
 

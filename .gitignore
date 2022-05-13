@@ -3,3 +3,4 @@
 __pycache__
 stockserver.egg-info
 .vscode
+.coverage
