@@ -14,6 +14,7 @@ pandas = "*"
 alpha-vantage = "*"
 autopep8 = "*"
 coverage = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 

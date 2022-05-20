@@ -1,4 +1,3 @@
-from typing import List
 from datetime import date, datetime
 
 from psycopg2.extras import execute_values
@@ -12,26 +11,24 @@ class StocksDaily:
     def addTicker(self, ticker: str) -> None:
         av = AlphaVantage()
         df = av.getTicker(ticker)
-        query = f"INSERT INTO public.stocks_daily VALUES %s"
+        query = f"INSERT INTO stocks_daily VALUES %s"
         data = df.values.tolist()
         for r in data:
             r[0] = datetime.date(r[0])
         try:
             execute_values(cursor, query, data)
             connection.commit()
-            connection.close()
         except Exception as error:
             connection.rollback()
             print(
                 f"There was an error entering the values into the database: {error}")
 
-    def getTicker(self, ticker) -> DataFrame:
+    def getTicker(self, ticker: str) -> DataFrame:
         query = f'SELECT * FROM stocks_daily WHERE ticker=%s;'
-        data = ticker
+        data = (ticker,)
         try:
             cursor.execute(query, data)
             result = DataFrame(cursor.fetchall())
-            connection.close()
             return result
         except Exception as error:
             connection.rollback()
@@ -44,7 +41,6 @@ class StocksDaily:
         try:
             cursor.execute(query, data)
             result = DataFrame(cursor.fetchall())
-            connection.close()
             return result
         except Exception as error:
             connection.rollback()
@@ -53,15 +49,11 @@ class StocksDaily:
 
     def removeTicker(self, ticker: str) -> None:
         query = f'DELETE FROM stocks_daily WHERE ticker=%s;'
-        data = (ticker)
+        data = (ticker,)
         try:
             cursor.execute(query, data)
             connection.commit()
-            connection.close()
         except Exception as error:
             connection.rollback()
             print(
-                f"There was an error retrieving the values from the database: {error}")
-
-    def __sanitize_data():
-        pass
+                f"There was an error removing the values from the database: {error}")

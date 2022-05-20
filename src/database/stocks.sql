@@ -15,6 +15,8 @@ CREATE INDEX ix_ticker_time ON stocks_daily (ticker,date DESC);
 CREATE TABLE company (
     ticker TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "description" TEXT,
+    country TEXT,
     sector TEXT,
     industry TEXT,
     exchange TEXT  
