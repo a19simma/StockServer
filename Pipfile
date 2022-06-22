@@ -9,12 +9,11 @@ pytest = "*"
 psycopg2 = "*"
 yfinance = "*"
 python-dotenv = "*"
-pgcopy = "*"
 pandas = "*"
 alpha-vantage = "*"
-autopep8 = "*"
 coverage = "*"
 sqlalchemy = "*"
+polygon-api-client = "~=1.0.0b"
 
 [dev-packages]
 

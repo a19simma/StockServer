@@ -1,4 +1,4 @@
-from src.database.connection import connection
+from src.database.connection import connection, initialize_timescale
 
 
 def test_connection():
@@ -7,3 +7,11 @@ def test_connection():
         assert True
     except:
         assert False, "Error while closing connection, or the connection was not made "
+
+
+def test_connection_error():
+    try:
+        initialize_timescale('asdasd')
+        assert False
+    except:
+        assert True

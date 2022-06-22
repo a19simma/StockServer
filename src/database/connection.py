@@ -26,20 +26,22 @@ query_timescale = 'CREATE EXTENSION IF NOT EXISTS timescaledb;'
 try:
     cursor.execute(query_create)
 except Exception as error:
-    pass
-    # database exists
+    print('Database exists already. Skipping.')
 
 connection = connect(CONNECTION_STRING_PSQL)
 cursor = connection.cursor()
 
-try:
-    cursor.execute(query_timescale)
-    connection.commit()
-    cursor.close()
-    connection.close()
-except Exception as error:
-    print(error)
 
+def initialize_timescale(query):
+    try:
+        cursor.execute(query)
+        connection.commit()
+        cursor.close()
+    except Exception as error:
+        print(error)
+
+
+initialize_timescale(query_timescale)
 engine = create_engine(CONNECTION_STRING_SQLALCHEMY)
 
 session = Session(engine)

@@ -1,14 +1,25 @@
 from src.data_sources.alpha import AlphaVantage
-import pandas as pd
+from pandas import DataFrame
 
 av = AlphaVantage()
 
 
 def test_getTicker_type():
-    data = av.getTicker('MSFT')
-    assert type(data) is pd.DataFrame
+    try:
+        data = av.getTicker('MSFT')
+        assert type(data) is DataFrame
+    except ValueError:
+        assert True
+    except:
+        assert False
 
 
 def test_getCompany():
-    data = av.getCompany('MSFT')
-    assert type(data) is pd.DataFrame and len(data.columns) is 7
+    try:
+        data = av.getCompany('MSFT')
+        assert type(data) is DataFrame and len(data.columns) is 7
+    except ValueError:
+        assert True
+    except Exception as error:
+        print(error)
+        assert False

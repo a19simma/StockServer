@@ -1,10 +1,9 @@
 from flask import Flask
 
-app = Flask(__name__)
+from src.routes import ticker
 
-@app.route('/hello/', methods=['GET', 'POST'])
-def welcome():
-    return "Hello World!"
+app = Flask(__name__)
+app.register_blueprint(ticker.ticker)
 
 if __name__ == '__main__':
     app.run(debug=True)
