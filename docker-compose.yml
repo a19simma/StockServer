@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  flask:
+    init: true
+    build: .
+    hostname: flask
+    expose:
+      - 3031
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - flask
