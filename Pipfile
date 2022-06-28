@@ -16,6 +16,7 @@ sqlalchemy = "*"
 polygon-api-client = "~=1.0.0b"
 pep8 = "*"
 autopep8 = "*"
+bs4 = "*"
 
 [dev-packages]
 
