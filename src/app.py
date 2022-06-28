@@ -1,5 +1,7 @@
 from flask import Flask
 
+from werkzeug.middleware.proxy_fix import ProxyFix
+
 from src.routes import ticker, company
 
 app = Flask(__name__)
@@ -12,7 +14,9 @@ def hello():
     return "<h1 style='color:blue'>Hello There!</h1>"
 
 
-application = app
+app.wsgi_app = ProxyFix(
+    app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
+)
 
 if __name__ == '__main__':
-    app.run(threaded=True, port="3000", host="0.0.0.0")
+    app.run(threaded=True, host="0.0.0.0")
