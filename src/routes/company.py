@@ -13,8 +13,12 @@ company = Blueprint('company', __name__)
 
 @company.route('/company/<ticker>', methods=['GET', 'POST'])
 def getTicker(ticker):
-    stmt = select(Company).where(Company.ticker == ticker)
-    data = session.execute(stmt)
+    try:
+        stmt = select(Company).where(Company.ticker == ticker)
+        data = session.execute(stmt)
+    except Exception as exception:
+        print(f"Getting {ticker} from the database failed. {exception} ")
+        session.rollback()
     result = {}
     for obj in data.scalars():
         result[obj.ticker] = {'name': obj.name, 'description': obj.description, 'country': obj.country,

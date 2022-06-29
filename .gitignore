@@ -5,3 +5,4 @@ stockserver.egg-info
 .vscode
 .coverage
 tests.ipynb
+.lib
