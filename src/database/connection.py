@@ -2,7 +2,7 @@ from psycopg2 import connect
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 import os
 
 load_dotenv()
@@ -49,5 +49,5 @@ engine = create_engine(CONNECTION_STRING_SQLALCHEMY, pool_size=10,
                        pool_pre_ping=True,
                        pool_use_lifo=True)
 
-# This is the object you want for sqlalchemy operations
-session = Session(engine)
+# call Session() for the session callable to make database orm queries
+Session = sessionmaker(bind=engine)

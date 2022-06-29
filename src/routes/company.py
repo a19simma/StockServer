@@ -1,18 +1,19 @@
 import json
 from sqlalchemy import select
 import pandas as pd
-from flask import Blueprint, jsonify
+from flask import Blueprint
 from markupsafe import escape
 
-from src.controller import api_controller
-from src.database.connection import session
+from src.database.connection import Session
 from src.model.tables import Company
 
 company = Blueprint('company', __name__)
+session = Session()
 
 
 @company.route('/company/<ticker>', methods=['GET', 'POST'])
 def getTicker(ticker):
+    ticker = ticker.upper()
     try:
         stmt = select(Company).where(Company.ticker == ticker)
         data = session.execute(stmt)

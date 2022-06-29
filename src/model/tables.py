@@ -4,13 +4,13 @@ from sqlalchemy import BigInteger, DDL, Column, ForeignKey, event, inspect, dele
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer, Date, String
 from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import DOUBLE_PRECISION
 
 from src.database.connection import engine
-from src.database.connection import session
+from src.database.connection import Session
 
 Base = declarative_base()
+session = Session()
 
 
 class StocksDaily(Base):

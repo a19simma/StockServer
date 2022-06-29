@@ -2,13 +2,13 @@ import requests as req
 from bs4 import BeautifulSoup
 import pandas as pd
 
-from src.database.connection import session
+from src.database.connection import Session
 from src.model.tables import Company, StocksDaily
 from src.data_sources.yahoo import YahooFinance
 
 if __name__ == '__main__':
     """This module populates tickers from the OMX30 and SP500 indexes, it is meant as a means to 
-    add test data to the database initially. It takes a long time to fetch all the data from Yahoo,
+    add test data to the database initially. It takes a long time to fetch all the ~4.5m rows from Yahoo,
     be patient."""
 
     OMX30 = (
@@ -47,6 +47,7 @@ if __name__ == '__main__':
     yf = YahooFinance()
     company_table = Company()
     stocks_daily_table = StocksDaily()
+    session = Session()
 
     if session.query(Company).where(Company.ticker == OMX30[-1]).all() == []:
         for e in OMX30:

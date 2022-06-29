@@ -4,15 +4,18 @@ import pandas as pd
 from flask import Blueprint, jsonify
 from markupsafe import escape
 
+from src.database.connection import Session
 from src.controller import api_controller
-from src.database.connection import session
 from src.model.tables import StocksDaily
 
 ticker = Blueprint('ticker', __name__)
 
+session = Session()
+
 
 @ticker.route('/ticker/<ticker>', methods=['GET', 'POST'])
 def getTicker(ticker):
+    ticker = ticker.upper()
     try:
         stmt = select(StocksDaily).where(StocksDaily.ticker == ticker)
         data = session.execute(stmt)
