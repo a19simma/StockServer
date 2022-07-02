@@ -8,18 +8,33 @@ from src.database.connection import Session
 from src.model.tables import Company
 
 company = Blueprint('company', __name__)
-session = Session()
+
+
+@company.route('/company', methods=['GET', 'POST'])
+def root():
+    html = "<h1>This is the root of the company endpoint"
+    html += "<p>Access the data of a specific company by its ticker eg. /company/MSFT"
+    html += "<h2>Following is a list of companies:</h2>"
+    html += "<ul>"
+
+    with Session() as session:
+        companies = session.query(Company).all()
+        for company in companies:
+            html += "<li><b>" + str(company.ticker) + \
+                "</b>: " + str(company.name)
+    return html
 
 
 @company.route('/company/<ticker>', methods=['GET', 'POST'])
 def getTicker(ticker):
     ticker = ticker.upper()
-    try:
-        stmt = select(Company).where(Company.ticker == ticker)
-        data = session.execute(stmt)
-    except Exception as exception:
-        print(f"Getting {ticker} from the database failed. {exception} ")
-        session.rollback()
+    with Session() as session:
+        try:
+            stmt = select(Company).where(Company.ticker == ticker)
+            data = session.execute(stmt)
+        except Exception as exception:
+            print(f"Getting {ticker} from the database failed. {exception} ")
+            session.rollback()
     result = {}
     for obj in data.scalars():
         result[obj.ticker] = {'name': obj.name, 'description': obj.description, 'country': obj.country,

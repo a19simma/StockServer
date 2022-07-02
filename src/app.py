@@ -11,7 +11,17 @@ app.register_blueprint(company.company)
 
 @app.route("/")
 def hello():
-    return "<h1 style='color:blue'>Hello There!</h1>"
+    html = "<h1>This is an api for stocks and economic data</h1>"
+    html += "<p>Following are the endpoints available:<p>"
+    html += "<ul>"
+    for route in app.url_map.iter_rules():
+        html += f'<li><a href="{route}">' + str(route) + "</code></li>"
+        html = html.replace("<ticker>", "&lt;ticker&gt;")
+        html = html.replace(
+            '<li><a href="/static/<path:filename>">/static/<path:filename></code></li>', "")
+    html += "</ul>"
+    print(html)
+    return html
 
 
 app.wsgi_app = ProxyFix(
