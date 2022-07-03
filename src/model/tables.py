@@ -1,16 +1,12 @@
-from typing import Dict
-from pandas import DataFrame
-from sqlalchemy import BigInteger, DDL, Column, ForeignKey, MetaData, event, inspect, delete
+from sqlalchemy import BigInteger, DDL, Column, ForeignKey, MetaData, event
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer, Date, String
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.dialects.postgresql import DOUBLE_PRECISION
 
 from src.database.connection import engine
-from src.database.connection import Session
 
 Base = declarative_base()
-session = Session()
 
 
 class Company(Base):
@@ -22,9 +18,6 @@ class Company(Base):
     sector = Column(String)
     industry = Column(String)
     exchange = Column(String)
-
-
-session.add(Company())
 
 
 class StocksDaily(Base):
@@ -43,6 +36,4 @@ event.listen(
         f"SELECT create_hypertable('{StocksDaily.__tablename__}', 'date');")
 )
 
-session.add(StocksDaily())
-session.commit()
 Base.metadata.create_all(engine)
