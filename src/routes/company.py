@@ -35,8 +35,8 @@ def getTicker(ticker):
         except Exception as exception:
             print(f"Getting {ticker} from the database failed. {exception} ")
             session.rollback()
-    result = {}
-    for obj in data.scalars():
-        result[obj.ticker] = {'name': obj.name, 'description': obj.description, 'country': obj.country,
-                              'sector': obj.sector, 'industry': obj.industry, 'exchange': obj.exchange}
+        result = {}
+        for obj in data.scalars():
+            result[obj.ticker] = {'name': obj.name, 'description': obj.description, 'country': obj.country,
+                                  'sector': obj.sector, 'industry': obj.industry, 'exchange': obj.exchange}
     return result

@@ -43,11 +43,7 @@ def initialize_timescale(query):
 
 initialize_timescale(query_timescale)
 
-engine = create_engine(CONNECTION_STRING_SQLALCHEMY, pool_size=10,
-                       max_overflow=2,
-                       pool_recycle=300,
-                       pool_pre_ping=True,
-                       pool_use_lifo=True)
+engine = create_engine(CONNECTION_STRING_SQLALCHEMY)
 
 # call Session() for the session callable to make database orm queries
-Session = sessionmaker(bind=engine)
+Session = sessionmaker(engine)

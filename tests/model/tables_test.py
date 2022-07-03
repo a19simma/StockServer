@@ -1,5 +1,4 @@
 from src.model.tables import StocksDaily, Company
-from src.database.connection import session
 
 
 def test():
