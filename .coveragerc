@@ -10,4 +10,3 @@ exclude_lines =
 
 show_missing = True
 omit = tests/*
-skip_empty = True
