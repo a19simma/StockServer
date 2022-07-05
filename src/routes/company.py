@@ -4,7 +4,7 @@ import pandas as pd
 from flask import Blueprint
 from markupsafe import escape
 
-from src.database.connection import Session
+from src.database.connection import initialize_session
 from src.model.tables import Company
 
 company = Blueprint('company', __name__)
@@ -17,7 +17,7 @@ def root():
     html += "<h2>Following is a list of companies:</h2>"
     html += "<ul>"
 
-    with Session.begin() as session:
+    with initialize_session() as session:
         companies = session.execute(select(Company)).scalars()
         for company in companies:
             html += "<li><b>" + str(company.ticker) + \
@@ -28,7 +28,7 @@ def root():
 @company.route('/company/<ticker>', methods=['GET', 'POST'])
 def getTicker(ticker):
     ticker = ticker.upper()
-    with Session.begin() as session:
+    with initialize_session() as session:
         try:
             stmt = select(Company).where(Company.ticker == ticker)
             data = session.execute(stmt)
