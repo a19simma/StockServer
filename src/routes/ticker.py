@@ -4,7 +4,7 @@ import pandas as pd
 from flask import Blueprint, jsonify
 from markupsafe import escape
 
-from src.database.connection import initialize_session
+from src.database.connection import Session
 from src.controller import api_controller
 from src.model.tables import StocksDaily, Company
 
@@ -18,7 +18,7 @@ def root():
     html += "<h2>Following is a list of companies:</h2>"
     html += "<ul>"
 
-    with initialize_session() as session:
+    with Session() as session:
         companies = session.execute(select(Company)).scalars()
         for company in companies:
             html += "<li><b>" + str(company.ticker) + \
@@ -29,7 +29,7 @@ def root():
 @ticker.route('/ticker/<ticker>', methods=['GET', 'POST'])
 def getTicker(ticker):
     ticker = ticker.upper()
-    with initialize_session() as session:
+    with Session() as session:
         try:
             stmt = select(StocksDaily).where(StocksDaily.ticker == ticker)
             data = session.execute(stmt)

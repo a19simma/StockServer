@@ -43,8 +43,7 @@ def initialize_timescale(query):
 
 initialize_timescale(query_timescale)
 
+engine = create_engine(CONNECTION_STRING_SQLALCHEMY,
+                       pool_pre_ping=True, pool_recycle=1800)
 
-def initialize_session():
-    engine = create_engine(CONNECTION_STRING_SQLALCHEMY)
-    Session = sessionmaker(engine)
-    return Session
+Session = sessionmaker(engine)
