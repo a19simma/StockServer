@@ -1,10 +1,12 @@
 from flask import Flask
+from flask_cors import CORS
 
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from src.routes import ticker, company
 
 app = Flask(__name__)
+CORS(app)
 app.register_blueprint(ticker.ticker)
 app.register_blueprint(company.company)
 
