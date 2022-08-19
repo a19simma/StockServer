@@ -40,3 +40,15 @@ def getTicker(ticker):
             result[obj.ticker] = {'name': obj.name, 'description': obj.description, 'country': obj.country,
                                   'sector': obj.sector, 'industry': obj.industry, 'exchange': obj.exchange}
     return result
+
+
+@company.route('/company/suggestions/<str>', methods=['GET'])
+def getSuggestions(str):
+    with Session() as session:
+        result = session.query(Company).filter(
+            Company.name.ilike(f"%{str}%")).limit(10)
+        data = []
+        for row in result:
+            data.append({"ticker": row.ticker, "name": row.name})
+
+    return data

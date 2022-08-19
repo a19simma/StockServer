@@ -1,6 +1,7 @@
 import requests as req
 from bs4 import BeautifulSoup
 import pandas as pd
+import asyncio
 
 from src.database.connection import Session
 from src.model.tables import Company, StocksDaily
@@ -11,7 +12,7 @@ if __name__ == '__main__':
     add test data to the database initially. It takes a long time to fetch all the ~4.5m rows from Yahoo,
     be patient."""
 
-    OMX30 = (
+    OMX30 = [
         'ABB.ST',
         'ALFA.ST',
         'ALIV-SDB.ST',
@@ -42,23 +43,25 @@ if __name__ == '__main__':
         'TEL2-B.ST',
         'TELIA.ST',
         'VOLV-B.ST',
-    )
+    ]
+
+    def addCompany(str):
+        company = yf.getCompany(str)
+        company_table.addDataFrame(company, session)
+        print(f'{str} added')
+
+    def addStock(str):
+        history = yf.getTicker(str)
+        stocks_daily_table.addDataFrame(history, session)
 
     yf = YahooFinance()
     company_table = Company()
     stocks_daily_table = StocksDaily()
     session = Session()
+    tasks = []
 
-    if session.query(Company).where(Company.ticker == OMX30[-1]).all() == []:
-        for e in OMX30:
-            if session.query(Company).where(Company.ticker == e).all() == []:
-                company = yf.getCompany(e)
-                company_table.addDataFrame(company)
-
-                history = yf.getTicker(e)
-                stocks_daily_table.addDataFrame(history)
-
-                print(f'{e} added')
+    addCompany(OMX30)
+    addStock(OMX30)
 
     url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
     page = req.get(url)
@@ -68,13 +71,5 @@ if __name__ == '__main__':
         1, 501) if list[i].td is not None]
     SP500 = [e.replace(".", "-") for e in SP500]
 
-    if session.query(Company).where(Company.ticker == SP500[-1]).all() == []:
-        for e in SP500:
-            if session.query(Company).where(Company.ticker == e).all() == []:
-                company = yf.getCompany(e)
-                company_table.addDataFrame(company)
-
-                history = yf.getTicker(e)
-                stocks_daily_table.addDataFrame(history)
-
-                print(f'{e} added')
+    addCompany(SP500)
+    addStock(SP500)
