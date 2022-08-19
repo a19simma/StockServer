@@ -55,7 +55,7 @@ class YahooFinance():
         for ticker in result['quoteResponse']['result']:
             data.append({
                 'ticker': ticker.get('symbol'),
-                'longName': ticker.get('longName'),
+                'name': ticker.get('longName'),
                 'exchange': ticker.get('fullExchangeName'),
                 'start': ticker.get('firstTradeDateMilliseconds'),
                 'currency': ticker.get('currency')

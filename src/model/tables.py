@@ -14,21 +14,18 @@ class Company(Base):
     __tablename__ = "company"
     ticker = Column(String, primary_key=True, index=True)
     name = Column(String, index=True)
-    description = Column(String)
-    country = Column(String)
-    sector = Column(String)
-    industry = Column(String)
     exchange = Column(String)
+    start = Column(BigInteger)
+    currency = Column(String)
 
-    def addDataFrame(self, company: DataFrame, session):
-        data = Company(ticker=company['ticker'].values[0],
-                       name=company['name'].values[0],
-                       description=company['description'].values[0],
-                       country=company['country'].values[0],
-                       sector=company['sector'].values[0],
-                       industry=company['industry'].values[0],
-                       exchange=company['exchange'].values[0])
-        session.add(data)
+    def addDataFrame(self, data: DataFrame, session):
+        for _, row in data.iterrows():
+            entry = Company(ticker=row['ticker'],
+                            name=row['name'],
+                            exchange=row['exchange'],
+                            start=row['start'],
+                            currency=row['currency'])
+            session.add(entry)
         session.commit()
 
 
@@ -59,6 +56,8 @@ class StocksDaily(Base):
 event.listen(
     StocksDaily.__table__, 'after_create', DDL(
         f"SELECT create_hypertable('{StocksDaily.__tablename__}', 'date');")
+
+
 )
 
 Base.metadata.create_all(engine)

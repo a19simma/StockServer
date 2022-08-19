@@ -1,6 +1,6 @@
 from src.data_sources.yahoo import YahooFinance
+from src.model.tables import Company
 from src.database.connection import Session
-from src.model.tables import Company, StocksDaily
 
 import aiohttp
 import asyncio
@@ -9,7 +9,11 @@ import platform
 from bs4 import BeautifulSoup
 import requests as req
 
-yf = YahooFinance
+yf = YahooFinance()
+company = Company()
 
-result = asyncio.run(yf.getCompany(['aapl']))
+result = asyncio.run(yf.getCompany(['aapl', 'msft']))
+with Session() as session:
+    company.addDataFrame(result, session)
+
 print(result)
