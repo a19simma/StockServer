@@ -10,7 +10,7 @@ from src.model.tables import Company
 company = Blueprint('company', __name__)
 
 
-@company.route('/company', methods=['GET', 'POST'])
+@company.route('/company', methods=['GET'])
 def root():
     html = "<h1>This is the root of the company endpoint"
     html += "<p>Access the data of a specific company by its ticker eg. /company/MSFT"
@@ -25,7 +25,7 @@ def root():
     return html
 
 
-@company.route('/company/<ticker>', methods=['GET', 'POST'])
+@company.route('/company/<ticker>', methods=['GET'])
 def getTicker(ticker):
     ticker = ticker.upper()
     with Session() as session:
