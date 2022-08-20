@@ -2,6 +2,7 @@ import requests as req
 from bs4 import BeautifulSoup
 import pandas as pd
 import asyncio
+from datetime import datetime
 
 from src.database.connection import Session
 from src.model.tables import Company, StocksDaily
@@ -45,14 +46,19 @@ if __name__ == '__main__':
         'VOLV-B.ST',
     ]
 
-    def addCompany(str):
-        company = yf.getCompany(str)
-        company_table.addDataFrame(company, session)
-        print(f'{str} added')
+    async def addCompany(list):
+        for str in list:
+            company = await yf.getCompany(str)
+            company_table.addDataFrame(company, session)
+            start = pd.to_datetime(company['start'].values[0])
+            start = start - datetime.fromtimestamp(0)
+            start = int(start.total_seconds())
+            await addStock(str, start)
 
-    def addStock(str):
-        history = yf.getTicker(str)
+    async def addStock(str, start):
+        history = await yf.getTicker(str, start, datetime.now())
         stocks_daily_table.addDataFrame(history, session)
+        print(f'{str} added')
 
     yf = YahooFinance()
     company_table = Company()
@@ -60,8 +66,7 @@ if __name__ == '__main__':
     session = Session()
     tasks = []
 
-    addCompany(OMX30)
-    addStock(OMX30)
+    asyncio.run(addCompany(OMX30))
 
     url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
     page = req.get(url)
@@ -71,5 +76,4 @@ if __name__ == '__main__':
         1, 501) if list[i].td is not None]
     SP500 = [e.replace(".", "-") for e in SP500]
 
-    addCompany(SP500)
-    addStock(SP500)
+    asyncio.run(addCompany(SP500))

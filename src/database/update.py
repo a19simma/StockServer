@@ -12,8 +12,5 @@ import requests as req
 yf = YahooFinance()
 company = Company()
 
-result = asyncio.run(yf.getCompany(['aapl', 'msft']))
 with Session() as session:
-    company.addDataFrame(result, session)
-
-print(result)
+    data = session.query(Company.ticker)
