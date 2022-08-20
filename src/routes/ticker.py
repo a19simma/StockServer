@@ -5,7 +5,6 @@ from flask import Blueprint, jsonify
 from markupsafe import escape
 
 from src.database.connection import Session
-from src.controller import api_controller
 from src.model.tables import StocksDaily, Company
 
 ticker = Blueprint('ticker', __name__)
