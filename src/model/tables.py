@@ -65,20 +65,6 @@ class StocksDaily(Base):
                 session.rollback()
         session.commit()
 
-    def updateTicker(self, ticker: str, session):
-        now = datetime.now()
-        last_updated = session.query(Company.updated).filter(
-            Company.ticker == ticker).scalar()
-        if now - last_updated > timedelta(hours=12):
-            yf = YahooFinance()
-            data = yf.getTicker([ticker], last_updated, now)
-            session.query(Company)\
-                .filter(Company.ticker == ticker)\
-                .update(updated=now)\
-                .execution_options(synchronize_session="fetch")
-            company = Company()
-            company.addDataFrame(data, session)
-
 
 event.listen(
     StocksDaily.__table__, 'after_create', DDL(
