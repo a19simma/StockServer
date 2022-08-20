@@ -10,7 +10,7 @@ from src.model.tables import Company
 company = Blueprint('company', __name__)
 
 
-@company.route('/company', methods=['GET', 'POST'])
+@company.route('/company', methods=['GET'])
 def root():
     html = "<h1>This is the root of the company endpoint"
     html += "<p>Access the data of a specific company by its ticker eg. /company/MSFT"
@@ -25,7 +25,7 @@ def root():
     return html
 
 
-@company.route('/company/<ticker>', methods=['GET', 'POST'])
+@company.route('/company/<ticker>', methods=['GET'])
 def getTicker(ticker):
     ticker = ticker.upper()
     with Session() as session:
@@ -40,3 +40,15 @@ def getTicker(ticker):
             result[obj.ticker] = {'name': obj.name, 'description': obj.description, 'country': obj.country,
                                   'sector': obj.sector, 'industry': obj.industry, 'exchange': obj.exchange}
     return result
+
+
+@company.route('/company/suggestions/<str>', methods=['GET'])
+def getSuggestions(str):
+    with Session() as session:
+        result = session.query(Company).filter(
+            Company.name.ilike(f"%{str}%")).limit(10)
+        data = []
+        for row in result:
+            data.append({"ticker": row.ticker, "name": row.name})
+
+    return data

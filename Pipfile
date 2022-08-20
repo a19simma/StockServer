@@ -18,6 +18,8 @@ pep8 = "*"
 autopep8 = "*"
 bs4 = "*"
 flask-cors = "*"
+yahooquery = "*"
+aiohttp = {extras = ["speedups"], version = "*"}
 
 [dev-packages]
 

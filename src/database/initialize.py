@@ -1,6 +1,8 @@
 import requests as req
 from bs4 import BeautifulSoup
 import pandas as pd
+import asyncio
+from datetime import datetime
 
 from src.database.connection import Session
 from src.model.tables import Company, StocksDaily
@@ -11,7 +13,7 @@ if __name__ == '__main__':
     add test data to the database initially. It takes a long time to fetch all the ~4.5m rows from Yahoo,
     be patient."""
 
-    OMX30 = (
+    OMX30 = [
         'ABB.ST',
         'ALFA.ST',
         'ALIV-SDB.ST',
@@ -42,23 +44,29 @@ if __name__ == '__main__':
         'TEL2-B.ST',
         'TELIA.ST',
         'VOLV-B.ST',
-    )
+    ]
+
+    async def addCompany(list):
+        for str in list:
+            company = await yf.getCompany(str)
+            company_table.addDataFrame(company, session)
+            start = pd.to_datetime(company['start'].values[0])
+            start = start - datetime.fromtimestamp(0)
+            start = int(start.total_seconds())
+            await addStock(str, start)
+
+    async def addStock(str, start):
+        history = await yf.getTicker(str, start, datetime.now())
+        stocks_daily_table.addDataFrame(history, session)
+        print(f'{str} added')
 
     yf = YahooFinance()
     company_table = Company()
     stocks_daily_table = StocksDaily()
     session = Session()
+    tasks = []
 
-    if session.query(Company).where(Company.ticker == OMX30[-1]).all() == []:
-        for e in OMX30:
-            if session.query(Company).where(Company.ticker == e).all() == []:
-                company = yf.getCompany(e)
-                company_table.addDataFrame(company)
-
-                history = yf.getTicker(e)
-                stocks_daily_table.addDataFrame(history)
-
-                print(f'{e} added')
+    asyncio.run(addCompany(OMX30))
 
     url = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
     page = req.get(url)
@@ -68,13 +76,4 @@ if __name__ == '__main__':
         1, 501) if list[i].td is not None]
     SP500 = [e.replace(".", "-") for e in SP500]
 
-    if session.query(Company).where(Company.ticker == SP500[-1]).all() == []:
-        for e in SP500:
-            if session.query(Company).where(Company.ticker == e).all() == []:
-                company = yf.getCompany(e)
-                company_table.addDataFrame(company)
-
-                history = yf.getTicker(e)
-                stocks_daily_table.addDataFrame(history)
-
-                print(f'{e} added')
+    asyncio.run(addCompany(SP500))
