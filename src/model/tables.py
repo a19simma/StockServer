@@ -40,7 +40,7 @@ class Company(Base):
 
 class StocksDaily(Base):
     __tablename__ = "stocks_daily"
-    timestamp = Column(TIMESTAMP, primary_key=True, index=True)
+    timestamp = Column(TIMESTAMP, primary_key=True)
     ticker = Column(String, ForeignKey(Company.ticker),
                     primary_key=True, index=True)
     open = Column(DOUBLE_PRECISION)

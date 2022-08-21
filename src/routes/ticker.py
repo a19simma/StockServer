@@ -37,6 +37,6 @@ def getTicker(ticker):
             session.rollback()
         result = {ticker: {}}
         for obj in data.scalars():
-            result[obj.ticker][str(obj.date)] = {'open': obj.open, 'high': obj.high,
-                                                 'low': obj.low, 'close': obj.close, 'volume': obj.volume, }
+            result[obj.ticker][str(obj.timestamp)] = {'open': obj.open, 'high': obj.high,
+                                                      'low': obj.low, 'close': obj.close, 'volume': obj.volume, }
     return result

@@ -37,8 +37,8 @@ def getTicker(ticker):
             session.rollback()
         result = {}
         for obj in data.scalars():
-            result[obj.ticker] = {'name': obj.name, 'description': obj.description, 'country': obj.country,
-                                  'sector': obj.sector, 'industry': obj.industry, 'exchange': obj.exchange}
+            result[obj.ticker] = {'name': obj.name, 'exchange': obj.exchange,
+                                  'start': obj.start, 'updated': obj.updated, 'currency': obj.currency}
     return result
 
 
