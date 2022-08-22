@@ -7,10 +7,8 @@ services:
       - "host.docker.internal:host-gateway"
     expose:
       - 3031
-  nginx:
-    build: ./nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      - flask
+
+networks: 
+  default:
+    name: proxy
+    external: true
