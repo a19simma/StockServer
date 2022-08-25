@@ -7,6 +7,8 @@ services:
       - "host.docker.internal:host-gateway"
     expose:
       - 3031
+    ports:
+      - "3031:3031"
 
 networks: 
   default:

@@ -6,8 +6,10 @@ from src.model.tables import Company, StocksDaily
 from src.database.connection import Session
 from src.data_sources.yahoo import YahooFinance
 
+yf = YahooFinance()
 
-async def updateTicker(ticker, updated, now):
+
+async def updateTicker(ticker, updated, now, session):
     data = await yf.getTicker(ticker, round(updated.timestamp()), round(now))
     session.query(Company)\
         .filter(Company.ticker == ticker)\
@@ -15,8 +17,7 @@ async def updateTicker(ticker, updated, now):
     return data
 
 
-if __name__ == '__main__':
-    yf = YahooFinance()
+def update():
     with Session() as session:
         tickers = session.query(Company.ticker, Company.updated).all()
         now = datetime.now().timestamp()
@@ -24,9 +25,13 @@ if __name__ == '__main__':
         for ticker, updated in tickers:
             if datetime.now() - updated > timedelta(hours=18):
                 ticker = asyncio.run(updateTicker(
-                    ticker, updated, now))
+                    ticker, updated, now, session))
                 data.append(ticker)
         data = pd.concat(data)
         stocksdaily = StocksDaily()
         stocksdaily.addDataFrame(data, session)
         session.commit()
+        print("Updated stocks successfully")
+
+
+update()

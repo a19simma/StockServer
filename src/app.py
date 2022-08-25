@@ -1,6 +1,7 @@
+import atexit
+
 from flask import Flask
 from flask_cors import CORS
-
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from src.routes import ticker, company

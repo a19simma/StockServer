@@ -1,3 +1,0 @@
-# START CRON JOB
-0 0,12 * * * python /app/src/database/update.py
-# END CRON JOB
